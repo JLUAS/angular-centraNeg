@@ -7,7 +7,7 @@ import { Observable } from 'rxjs/internal/Observable';
   providedIn: 'root'
 })
 export class NumbersService {
-  private apiUrl = 'http://localhost:3030/numeros';
+  private apiUrl = 'https://call-t0fi.onrender.com/numeros';
   constructor(private http: HttpClient, private router: Router) { }
 
   getNumbers(rol:string):Observable<any>{
