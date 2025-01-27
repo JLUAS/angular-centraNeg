@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { UserRegister, AuthenticateUser } from '../../../models/User';
-import { UsersService } from '../../../services/users.service';
+import { NumbersService } from '../../../services/numbers.service';
 
 @Component({
   selector: 'app-add-number',
@@ -11,7 +11,7 @@ export class AddNumberComponent {
   modal:boolean=false
 
 
-    constructor(private usersService: UsersService) {}
+    constructor(private numbersService: NumbersService) {}
 
     user: UserRegister = { firstName: '', middleName:'', lastName:'', email: '', password: '', rol: '', authenticated: false, authCode: ''};
     errMessage: string = "";
@@ -20,6 +20,7 @@ export class AddNumberComponent {
     errGeneral: boolean = false;
     isLoading: boolean = false;
     success: boolean= false;
+    isUploading: boolean = false
     succMessage:string= ""
     passwordToggle: string = "password";
     visibility:string="visibility_off"
@@ -43,45 +44,31 @@ export class AddNumberComponent {
       return authCode;
     }
 
-    register() {
-      if (this.user.email != '') {
-        this.user.password = this.generateAuthCode();
-        if (this.user.password.length < 8) {
-          this.errMessage = "La contraseña debe de tener mínimo 8 caracteres";
-          this.errPassword = true;
-          this.errGeneral = false;
-        }else {
+    selectedFile: File | null = null;
+    responseMessage: string | null = null;
 
-          // Generar el authCode antes de registrar al usuario
-          this.user.authCode = this.generateAuthCode();
-
-          // Llamar al servicio para registrar el usuario
-          this.usersService.register(this.user).subscribe(
-            (res: any) => {
-              this.isLoading = false;
-              if(res.isRegistered== true){
-                this.success== true
-                this.succMessage="Usuario registrado correctamente"
-                const userEmail:AuthenticateUser={email:'', authCode:''}
-                userEmail.email=this.user.email
-                userEmail.authCode=this.user.authCode
-                this.user={ firstName: '', middleName:'', lastName:'', email: '', password: '', rol: '', authenticated: false, authCode: ''};
-                window.location.reload()
-              }
-
-            },
-            (err) => {
-              this.isLoading = false;
-              this.errPassword = false;
-              if(err.isRegistered==false)this.errMessage = 'Error al agregar administrador';
-              console.error(err);
-            }
-          );
-        }
-      } else {
-        this.errPassword = false;
-        this.errGeneral = true;
-        this.errMessage = "Llena todos los campos";
+    onFileSelected(event: Event): void {
+      const fileInput = event.target as HTMLInputElement;
+      if (fileInput.files && fileInput.files.length > 0) {
+        this.selectedFile = fileInput.files[0];
       }
     }
+
+    uploadFile(): void {
+      if (this.selectedFile) {
+        this.isUploading = true;  // Inicia el proceso de carga
+        this.numbersService.uploadExcel(this.selectedFile, "admin").subscribe({
+          next: (response) => {
+            this.responseMessage = 'Archivo subido exitosamente.';
+            this.selectedFile = null;
+            this.isUploading = false
+          },
+          error: (error) => {
+            this.responseMessage = 'Error al subir el archivo: ' + error;
+            this.isUploading = false
+          },
+        });
+      }
+    }
+
 }

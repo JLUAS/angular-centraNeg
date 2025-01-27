@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 })
 export class UsersService {
 
-  private apiUrl = 'https://call-t0fi.onrender.com/users';
+  private apiUrl = 'http://localhost:3030/users';
   // private apiUrl = 'https://humorous-oryx-ace.ngrok-free.app';
 
   constructor(private http: HttpClient, private router: Router) { }
@@ -82,9 +82,7 @@ export class UsersService {
   }
 
   deleteUser(user: UserTable): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/deleteUser/admin`, {
-        body: user
-    });
+    return this.http.delete(`${this.apiUrl}/deleteUser/admin`, {body: user});
   }
 
 

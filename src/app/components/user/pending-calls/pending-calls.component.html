@@ -1,26 +1,23 @@
-<section class="my-10 flex flex-col">
-  <h2 class="font-extrabold text-4xl mb-2">Numeros inaccesibles</h2>
+<section class="flex flex-col my-10">
+  <h2 class="font-extrabold text-4xl mb-2">Numeros contactados</h2>
   <table class="min-w-full border-collapse border border-gray-300">
     <thead class="bg-gray-200">
       <tr>
+        <th class="border border-gray-300 px-4 py-2 text-left">Nombre</th>
         <th class="border border-gray-300 px-4 py-2 text-left">Numero</th>
+        <th class="border border-gray-300 px-4 py-2 text-left">Duración</th>
         <th class="border border-gray-300 px-4 py-2 text-left">Editar</th>
-        <th class="border border-gray-300 px-4 py-2 text-left">Eliminar</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let number of paginatedData" class="even:bg-gray-50">
+        <td class="border border-gray-300 px-4 py-2">{{ number.nombre }}</td>
         <td class="border border-gray-300 px-4 py-2">{{ number.numero }}</td>
+        <td class="border border-gray-300 px-4 py-2">{{ number.tiempo }}</td>
         <td class="border border-gray-300 px-4 py-2 text-center group hover:bg-gray-100 hover:cursor-pointer"
           (click)="editModal(number)">
           <button class="flex items-center mx-auto justify-center">
             <mat-icon class="group-hover:text-orange">edit</mat-icon>
-          </button>
-        </td>
-        <td class="border border-gray-300 px-4 py-2 text-center group hover:bg-gray-100 hover:cursor-pointer"
-          (click)="deleteModal(number)">
-          <button class="flex items-center mx-auto justify-center">
-            <mat-icon class="group-hover:text-red-700">delete</mat-icon>
           </button>
         </td>
       </tr>
@@ -35,6 +32,7 @@
         type="number"
         [(ngModel)]="pageSize"
         (change)="onPageSizeChange()"
+        min="1"
       />
     </div>
     <div class="flex justify-end items-center mt-4">

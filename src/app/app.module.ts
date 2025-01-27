@@ -32,6 +32,8 @@ import { NuevosNumerosComponent } from './components/admin/nuevos-numeros/nuevos
 import { NumerosContactadosComponent } from './components/admin/numeros-contactados/numeros-contactados.component';
 import { NumerosInaccesiblesComponent } from './components/admin/numeros-inaccesibles/numeros-inaccesibles.component';
 import { AddNumberComponent } from './components/admin/add-number/add-number.component';
+import { PendientesComponent } from './pages/user/pendientes/pendientes.component';
+import { PendingCallsComponent } from './components/user/pending-calls/pending-calls.component';
 
 
 @NgModule({
@@ -58,6 +60,8 @@ import { AddNumberComponent } from './components/admin/add-number/add-number.com
     NumerosContactadosComponent,
     NumerosInaccesiblesComponent,
     AddNumberComponent,
+    PendientesComponent,
+    PendingCallsComponent,
 
   ],
   imports: [

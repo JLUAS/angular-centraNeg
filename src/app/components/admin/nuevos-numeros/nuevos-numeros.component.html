@@ -1,39 +1,87 @@
-<table class="min-w-full border-collapse border border-gray-300 my-10">
-  <thead class="bg-gray-200">
-    <tr>
-      <th class="border border-gray-300 px-4 py-2 text-left">Nombre</th>
-      <th class="border border-gray-300 px-4 py-2 text-left">Numero</th>
-      <th class="border border-gray-300 px-4 py-2 text-left">Editar</th>
-      <th class="border border-gray-300 px-4 py-2 text-left">Eliminar</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let number of paginatedData" class="even:bg-gray-50">
-      <td class="border border-gray-300 px-4 py-2">{{ number.nombre }}</td>
-      <td class="border border-gray-300 px-4 py-2">{{ number.numero }}</td>
-      <td class="border border-gray-300 px-4 py-2 text-center group hover:bg-gray-100 hover:cursor-pointer"
-        (click)="editModal(number)">
-        <button class="flex items-center mx-auto justify-center">
-          <mat-icon class="group-hover:text-orange">edit</mat-icon>
-        </button>
-      </td>
-      <td class="border border-gray-300 px-4 py-2 text-center group hover:bg-gray-100 hover:cursor-pointer"
-        (click)="deleteModal(number)">
-        <button class="flex items-center mx-auto justify-center">
-          <mat-icon class="group-hover:text-red-700">delete</mat-icon>
-        </button>
-      </td>
-    </tr>
-  </tbody>
-</table>
-<div class="flex justify-end items-center mt-4">
-  <button class="flex align-middle px-4 py-2 bg-gray-200 rounded hover:bg-gray-300" (click)="prevPage()"
-    [disabled]="currentPage === 1">
-    <mat-icon>navigate_before</mat-icon>
-  </button>
-  <div class="px-2">Página {{ currentPage }} de {{ totalPages }}</div>
-  <button class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 align-middle flex" (click)="nextPage()"
-    [disabled]="currentPage === totalPages">
-    <mat-icon>navigate_next</mat-icon>
-  </button>
+<section class="my-10 flex flex-col">
+  <h2 class="font-extrabold text-4xl mb-2">Numeros pendientes de llamar</h2>
+  <table class="min-w-full border-collapse border border-gray-300">
+    <thead class="bg-gray-200">
+      <tr>
+        <th class="border border-gray-300 px-4 py-2 text-left">Nombre</th>
+        <th class="border border-gray-300 px-4 py-2 text-left">Numero</th>
+        <th class="border border-gray-300 px-4 py-2 text-left">Editar</th>
+        <th class="border border-gray-300 px-4 py-2 text-left">Eliminar</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let number of paginatedData" class="even:bg-gray-50">
+        <td class="border border-gray-300 px-4 py-2">{{ number.nombre }}</td>
+        <td class="border border-gray-300 px-4 py-2">{{ number.numero }}</td>
+        <td class="border border-gray-300 px-4 py-2 text-center group hover:bg-gray-100 hover:cursor-pointer"
+          (click)="editModal(number)">
+          <button class="flex items-center mx-auto justify-center">
+            <mat-icon class="group-hover:text-orange">edit</mat-icon>
+          </button>
+        </td>
+        <td class="border border-gray-300 px-4 py-2 text-center group hover:bg-gray-100 hover:cursor-pointer"
+          (click)="deleteModal(number)">
+          <button class="flex items-center mx-auto justify-center">
+            <mat-icon class="group-hover:text-red-700">delete</mat-icon>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="flex flex-col justify-end">
+    <div class="flex flex-row align-middle ml-auto items-center mt-4 w-fit">
+      <label class="text-center mx-4" for="pageSize">Numero de filas</label>
+      <input
+        id="pageSize"
+        class="text-center rounded-md border-2 border-black text-black"
+        type="number"
+        [(ngModel)]="pageSize"
+        (change)="onPageSizeChange()"
+      />
+    </div>
+    <div class="flex justify-end items-center mt-4">
+      <button
+        class="flex align-middle px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+        (click)="prevPage()"
+        [disabled]="currentPage === 1"
+      >
+        <mat-icon>navigate_before</mat-icon>
+      </button>
+      <div class="px-2">Página {{ currentPage }} de {{ totalPages }}</div>
+      <button
+        class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 align-middle flex"
+        (click)="nextPage()"
+        [disabled]="currentPage === totalPages"
+      >
+        <mat-icon>navigate_next</mat-icon>
+      </button>
+    </div>
+  </div>
+
+</section>
+
+<div *ngIf="isDeleteModal && deleteNumber"
+  class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center z-50">
+  <div class="bg-white p-6 rounded-lg shadow-lg w-11/12 md:w-1/2 lg:w-1/3">
+    <h2 class="text-2xl font-semibold text-gray-800 mb-4">Eliminar usuario</h2>
+    <p class="mb-4 text-lg">Seguro que desea eliminar el numero <strong class="italic">{{deleteNumber.numero}}</strong></p>
+    <form #deleteUserForm="ngForm" (ngSubmit)="deleteNumberChange(deleteUserForm)">
+      <div class="flex flex-col justify-end space-x-2">
+        <div class="flex flex-row justify-end">
+          <button type="button"
+            class="px-4 py-2 rounded-md border-2 duration-300 border-gray-300 text-gray-700 bg-white hover:bg-gray-100 focus:outline-none"
+            (click)="closeDeleteModal()">
+            Cancelar
+          </button>
+          <button type="submit"
+            class="px-4 py-2 rounded-md border-2 duration-300 bg-red-400 text-white hover:bg-red-700 focus:outline-none mx-2">
+            Eliminar
+          </button>
+        </div>
+        <div *ngIf="errorMessage" class="text-red-500">
+          {{ errorMessage }}
+        </div>
+      </div>
+    </form>
+  </div>
 </div>

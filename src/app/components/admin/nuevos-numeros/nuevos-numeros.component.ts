@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NuevosNumeros } from '../../../models/Number';
 import { NumbersService } from '../../../services/numbers.service';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-nuevos-numeros',
@@ -32,9 +33,9 @@ export class NuevosNumerosComponent implements OnInit{
     this.isLoading = true;
     const rol = localStorage.getItem('rol')
     if(rol){
-      this.numbersService.getNumbers(rol).subscribe(
-        (users: NuevosNumeros[]) => {
-          this.numbers = users;
+      this.numbersService.getNewNumbers(rol).subscribe(
+        (numbers: NuevosNumeros[]) => {
+          this.numbers = numbers;
           this.totalPages = Math.ceil(this.numbers.length / this.pageSize);
           this.paginateData();
           this.isLoading = false;
@@ -46,6 +47,18 @@ export class NuevosNumerosComponent implements OnInit{
         }
       );
     }
+  }
+
+  onPageSizeChange(): void {
+    this.currentPage = 1;
+    this.calculateTotalPages();
+  }
+
+
+  calculateTotalPages(): void {
+    const totalItems = this.numbers.length;
+    this.totalPages = Math.ceil(totalItems / this.pageSize);
+    this.paginateData()
   }
 
   paginateData(): void {
@@ -91,5 +104,23 @@ export class NuevosNumerosComponent implements OnInit{
 
   closeDeleteModal(): void {
     this.isDeleteModal = false;
+  }
+
+  deleteNumberChange(form: NgForm): void {
+      if (this.deleteNumber) {
+        console.log(this.deleteNumber.id)
+        this.numbersService.deleteNumber(this.deleteNumber.id).subscribe(
+          (response) => {
+            console.error('Error al eliminar usuario:', response);
+            this.errorMessage = 'No se pudo eliminar el usuario.';
+          },
+          (error) => {
+            this.closeEditModal();
+            this.loadNumbers()
+          }
+        );
+      }else{
+        this.errorMessage = 'No se pudo eliminar el usuario, datos no validos.';
+      }
   }
 }

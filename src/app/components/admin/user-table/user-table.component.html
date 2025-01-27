@@ -30,16 +30,34 @@
       </tr>
     </tbody>
   </table>
-  <div class="flex justify-end items-center mt-4">
-    <button class="flex align-middle px-4 py-2 bg-gray-200 rounded hover:bg-gray-300" (click)="prevPage()"
-      [disabled]="currentPage === 1">
-      <mat-icon>navigate_before</mat-icon>
-    </button>
-    <div class="px-2">Página {{ currentPage }} de {{ totalPages }}</div>
-    <button class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 align-middle flex" (click)="nextPage()"
-      [disabled]="currentPage === totalPages">
-      <mat-icon>navigate_next</mat-icon>
-    </button>
+  <div class="flex flex-col justify-end">
+    <div class="flex flex-row align-middle ml-auto items-center mt-4 w-fit">
+      <label class="text-center mx-4" for="pageSize">Numero de filas</label>
+      <input
+        id="pageSize"
+        class="text-center rounded-md border-2 border-black text-black"
+        type="number"
+        [(ngModel)]="pageSize"
+        (change)="onPageSizeChange()"
+      />
+    </div>
+    <div class="flex justify-end items-center mt-4">
+      <button
+        class="flex align-middle px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+        (click)="prevPage()"
+        [disabled]="currentPage === 1"
+      >
+        <mat-icon>navigate_before</mat-icon>
+      </button>
+      <div class="px-2">Página {{ currentPage }} de {{ totalPages }}</div>
+      <button
+        class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 align-middle flex"
+        (click)="nextPage()"
+        [disabled]="currentPage === totalPages"
+      >
+        <mat-icon>navigate_next</mat-icon>
+      </button>
+    </div>
   </div>
 </div>
 

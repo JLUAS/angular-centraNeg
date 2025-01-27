@@ -11,47 +11,29 @@
   </div>
 </div>
 
-<!-- Modal -->
 <div *ngIf="modal" class="z-50 fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
   <div class="w-full max-w-lg bg-bone p-6 rounded-lg shadow-lg">
     <div class="flex-col">
       <div class="grid grid-cols-1 md:grid-cols-2 grid-flow-row gap-4">
-        <div class=" py-3 mx-auto flex flex-col w-full">
-          <label class="font-bold text-xl" for="email">Correo electronico</label>
-          <input class="border-2 border-eblack rounded-md p-2 mt-2 focus:outline-none focus:border-orangeHover" type="email" placeholder="email@bitgenios.com" [(ngModel)]="user.email" name="email" id="email" required>
-        </div>
-        <div class=" py-3 mx-auto flex flex-col w-full">
-          <label class="font-bold text-xl" for="firstName">Nombre</label>
-          <input class="border-2 border-eblack rounded-md p-2 mt-2 focus:outline-none focus:border-orangeHover" type="text" placeholder="firstName" [(ngModel)]="user.firstName" name="firstName" id="firstName" required>
-        </div>
-        <div class=" py-3 mx-auto flex flex-col w-full">
-          <label class="font-bold text-xl" for="middleName">Apellido paterno</label>
-          <input class="border-2 border-eblack rounded-md p-2 mt-2 focus:outline-none focus:border-orangeHover" type="text" placeholder="middleName" [(ngModel)]="user.middleName" name="middleName" id="middleName" required>
-        </div>
-        <div class=" py-3 mx-auto flex flex-col w-full">
-          <label class="font-bold text-xl" for="lastName">Apellido materno</label>
-          <input class="border-2 border-eblack rounded-md p-2 mt-2 focus:outline-none focus:border-orangeHover" type="text" placeholder="lastName" [(ngModel)]="user.lastName" name="lastName" id="lastName" required>
-        </div>
 
-        <div class=" py-3 mx-auto flex flex-col w-full">
-          <label class="font-bold text-xl" for="role">Rol</label>
-          <select class="border-2 border-eblack rounded-md p-2 mt-2 focus:outline-none focus:border-orangeHover" [(ngModel)]="user.rol" name="role" id="role" required>
-            <option value="" disabled selected>Selecciona un rol</option>
-            <option value="admin">Administrador</option>
-            <option value="leader">Lider</option>
-            <option value="user">Personal de la salud</option>
-            <option value="root">Root</option>
-          </select>
+        <div class="py-3 mx-auto flex flex-col w-full">
+          <label class="font-bold text-xl" for="firstName">Nombre</label>
+          <input class="border-2 border-eblack rounded-md p-2 mt-2 focus:outline-none focus:border-orangeHover" type="file" placeholder="firstName" (change)="onFileSelected($event)" required>
         </div>
       </div>
       <div class="flex flex-col justify-end">
-        <div class="flex flex-row-reverse justify-start">
-          <button type="button" (click)="register()" class="px-2 py-1 rounded-md border-2 bg-orange text-white text-xl ml-2 duration-300 hover:bg-orangeHover">Continuar</button>
-          <button type="button" (click)="modal=!modal" class="px-2 py-1 rounded-md border-2 border-red-700 duration-300 hover:bg-red-100 text-xl text-red-700 ">Cancelar</button>
+        <div *ngIf="!isUploading" class="flex flex-row-reverse justify-start">
+          <button type="button" [disabled]="!selectedFile" (click)="uploadFile()" class="px-2 py-1 rounded-md border-2 bg-orange text-white text-xl ml-2 duration-300 hover:bg-orangeHover">Continuar</button>
+          <button type="button" (click)="modal=!modal" class="px-2 py-1 rounded-md border-2 border-red-700 duration-300 hover:bg-red-100 text-xl text-red-700">Cancelar</button>
         </div>
-        <p class="text-red-700 text-sm" *ngIf="errGeneral">{{errMessage}}</p>
-        <p class="text-red-700 text-sm" *ngIf="success">{{succMessage}}</p>
+
+        <p class="text-red-700 text-sm" *ngIf="errGeneral">{{ errMessage }}</p>
+        <div *ngIf="isUploading" class="flex justify-center items-center py-4">
+          <div class="loader"></div>
+        </div>
+
       </div>
     </div>
   </div>
 </div>
+

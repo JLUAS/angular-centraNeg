@@ -52,6 +52,18 @@ export class UserTableComponent implements OnInit {
     );
   }
 
+
+  onPageSizeChange(): void {
+    this.currentPage = 1;
+    this.calculateTotalPages();
+  }
+
+  calculateTotalPages(): void {
+    const totalItems = this.users.length;
+    this.totalPages = Math.ceil(totalItems / this.pageSize);
+    this.paginateData()
+  }
+
   paginateData(): void {
     const start = (this.currentPage - 1) * this.pageSize;
     const end = start + this.pageSize;

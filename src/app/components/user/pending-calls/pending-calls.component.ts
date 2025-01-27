@@ -3,11 +3,11 @@ import { NumerosContactados } from '../../../models/Number';
 import { NumbersService } from '../../../services/numbers.service';
 
 @Component({
-  selector: 'app-numeros-contactados',
-  templateUrl: './numeros-contactados.component.html',
-  styleUrl: './numeros-contactados.component.css'
+  selector: 'app-pending-calls',
+  templateUrl: './pending-calls.component.html',
+  styleUrl: './pending-calls.component.css'
 })
-export class NumerosContactadosComponent  implements OnInit{
+export class PendingCallsComponent  implements OnInit{
 
   constructor(private numbersService: NumbersService){}
   ngOnInit(): void {
@@ -32,7 +32,7 @@ export class NumerosContactadosComponent  implements OnInit{
     this.isLoading = true;
     const rol = localStorage.getItem('rol')
     if(rol){
-      this.numbersService.getContactedNumbers(rol).subscribe(
+      this.numbersService.getContactedNumbersUser(rol).subscribe(
         (numbers: NumerosContactados[]) => {
           this.numbers = numbers;
           this.totalPages = Math.ceil(this.numbers.length / this.pageSize);
@@ -60,15 +60,10 @@ export class NumerosContactadosComponent  implements OnInit{
   }
 
   paginateData(): void {
-    const filteredNumbers = this.numbers.filter(
-      (number) => number.numero !== null && number.tiempo !== null
-    );
     const start = (this.currentPage - 1) * this.pageSize;
     const end = start + this.pageSize;
-    this.paginatedData = filteredNumbers.slice(start, end);
-    this.totalPages = Math.ceil(filteredNumbers.length / this.pageSize);
+    this.paginatedData = this.numbers.slice(start, end);
   }
-
 
   nextPage(): void {
     if (this.currentPage < this.totalPages) {
